@@ -36,10 +36,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
       theme: MyThemeData.lightTheme,
-      // home: const MoviesScreen(),
+      home: const MoviesScreen(),
       // home: const FavoritesScreen(),
       // home: const MovieDetailsScreen(),
-      home: const SplashScreen(),
+      // home: const SplashScreen(),
     );
   }
 }
