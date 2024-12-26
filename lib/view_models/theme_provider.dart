@@ -5,20 +5,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 //  ChangeNotifierProvider<ThemeProvider>(
 //           create: (_) => ThemeProvider(), //..loadTheme(),
 //         ),
-// final themeProvider = StateNotifierProvider<ThemeProvider, ThemeEnums>(
-//   (_) => ThemeProvider(),
-// );
+final themeProvider = StateNotifierProvider<ThemeProvider, ThemeEnums>(
+  (_) => ThemeProvider(),
+);
 
 class ThemeProvider extends StateNotifier<ThemeEnums> {
   final prefsKey = "isDarkMode";
 
-  ThemeProvider() : super(ThemeEnums.light) {
+  ThemeProvider() : super(ThemeEnums.dark) {
     _loadTheme();
   }
 
   Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
-    final isDarkMode = prefs.getBool(prefsKey) ?? false;
+    final isDarkMode = prefs.getBool(prefsKey) ?? true;
     state = isDarkMode ? ThemeEnums.dark : ThemeEnums.light;
   }
 
