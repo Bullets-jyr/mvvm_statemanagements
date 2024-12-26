@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mvvm_statemanagements/constants/my_theme_data.dart';
-import 'package:mvvm_statemanagements/screens/favorite_screen.dart';
+import 'package:mvvm_statemanagements/screens/favorites_screen.dart';
 import 'package:mvvm_statemanagements/screens/movie_details.dart';
 import 'package:mvvm_statemanagements/screens/movies_screen.dart';
 import 'package:mvvm_statemanagements/screens/splash_screen.dart';
 import 'package:mvvm_statemanagements/service/init_getit.dart';
 import 'package:mvvm_statemanagements/service/navigation_service.dart';
+import 'package:mvvm_statemanagements/view_models/favorites_provider.dart';
+import 'package:mvvm_statemanagements/view_models/movies_provider.dart';
+import 'package:mvvm_statemanagements/view_models/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   setupLocator(); // Initialize GetIt
@@ -28,18 +32,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // 이 머터리얼 앱에 탐색 키를 추가할 수 있습니다.
-      // 그리고 이 탐색 키를 추가하면 그로부터 컨텍스트를 얻을 수 있습니다.
-      // 따라서 이 키에서 컨텍스트에 액세스할 수 있습니다.
-      navigatorKey: getIt<NavigationService>().navigatorKey,
-      debugShowCheckedModeBanner: false,
-      title: 'Movies App',
-      theme: MyThemeData.lightTheme,
-      home: const MoviesScreen(),
-      // home: const FavoritesScreen(),
-      // home: const MovieDetailsScreen(),
-      // home: const SplashScreen(),
+    // final themeProvider = Provider.of<ThemeProvider>(context);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (_) => ThemeProvider(),
+          // create: (_) => ThemeProvider()..loadTheme(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => MoviesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FavoritesProvider(),
+        ),
+      ],
+      child: Consumer(builder: (context, ThemeProvider themeProvider, child) {
+        return MaterialApp(
+          navigatorKey: getIt<NavigationService>().navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Movies App',
+          theme: themeProvider.themeData, //MyThemeData.darkTheme,
+          home: const SplashScreen(),
+          // const SplashScreen(), //const MovieDetailsScreen(), //const FavoritesScreen(), //const MoviesScreen(),
+        );
+      }),
     );
   }
 }

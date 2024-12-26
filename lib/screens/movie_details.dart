@@ -4,6 +4,7 @@ import 'package:mvvm_statemanagements/models/movies_model.dart';
 import 'package:mvvm_statemanagements/widgets/cached_image_widget.dart';
 import 'package:mvvm_statemanagements/widgets/movies/favorite_btn_widget.dart';
 import 'package:mvvm_statemanagements/widgets/movies/genres_list_widget.dart';
+import 'package:provider/provider.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   const MovieDetailsScreen({
@@ -14,17 +15,21 @@ class MovieDetailsScreen extends StatelessWidget {
   // final MovieModel movieModel;
   @override
   Widget build(BuildContext context) {
+    final moviesModelProvider = Provider.of<MovieModel>(context);
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            SizedBox(
-              height: size.height * 0.45,
-              width: double.infinity,
-              child: const CachedImageWidget(
-                imgUrl: MyAppConstants.movieImage,
-                // "https://image.tmdb.org/t/p/w500/${movieModel.backdropPath}",
+            Hero(
+              tag: moviesModelProvider.id,
+              child: SizedBox(
+                height: size.height * 0.45,
+                width: double.infinity,
+                child: CachedImageWidget(
+                  imgUrl:
+                      "https://image.tmdb.org/t/p/w500/${moviesModelProvider.backdropPath}",
+                ),
               ),
             ),
             SingleChildScrollView(
@@ -41,51 +46,53 @@ class MovieDetailsScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 25),
                         child: Material(
                           borderRadius: BorderRadius.circular(20),
-                          child: const Padding(
-                            padding: EdgeInsets.all(16.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 25),
+                                const SizedBox(height: 25),
                                 Text(
-                                  'movieModel.title',
+                                  moviesModelProvider.title,
                                   maxLines: 2,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     // color: Theme.of(context).textSelectionColor,
                                     fontSize: 28.0,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
-                                SizedBox(height: 5.0),
+                                const SizedBox(height: 5.0),
                                 Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.star,
                                       color: Colors.amber,
                                       size: 20,
                                     ),
-                                    SizedBox(width: 5),
-                                    Text("8/10"),
-                                    //"${movieModel.voteAverage.toStringAsFixed(1)}/10"),
-                                    Spacer(),
+                                    const SizedBox(width: 5),
                                     Text(
-                                      'movieModel.releaseDate',
-                                      style: TextStyle(color: Colors.grey),
+                                        "${moviesModelProvider.voteAverage.toStringAsFixed(1)}/10"),
+                                    //"${movieModel.voteAverage.toStringAsFixed(1)}/10"),
+                                    const Spacer(),
+                                    Text(
+                                      moviesModelProvider.releaseDate,
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 GenresListWidget(
-                                  // movieModel: movieModel,
+                                  movieModel: moviesModelProvider,
                                 ),
-                                SizedBox(height: 15),
+                                const SizedBox(height: 15),
                                 Text(
-                                  'movieModel.overview',
+                                  moviesModelProvider.overview,
                                   textAlign: TextAlign.justify,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18.0,
                                   ),
                                 ),
@@ -101,11 +108,12 @@ class MovieDetailsScreen extends StatelessWidget {
                             color: Theme.of(context).cardColor,
                             shape: BoxShape.circle,
                           ),
-                          child: const Padding(
-                              padding: EdgeInsets.all(6.0),
-                              child: FavoriteBtnWidget(
-                                // movieModel: movieModel,
-                              )),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: FavoriteBtnWidget(
+                              movieModel: moviesModelProvider,
+                            ),
+                          ),
                         ),
                       ),
                     ],
