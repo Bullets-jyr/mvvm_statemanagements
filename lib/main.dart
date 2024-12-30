@@ -43,7 +43,7 @@ class MyApp extends ConsumerWidget {
       theme: themeState == ThemeEnums.dark
           ? MyThemeData.darkTheme
           : MyThemeData.lightTheme,
-      home: const MoviesScreen(),
+      home: const SplashScreen(),
       // const SplashScreen(), //const MovieDetailsScreen(), //const FavoritesScreen(), //const MoviesScreen(),
     );
   }
