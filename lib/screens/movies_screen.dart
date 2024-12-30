@@ -13,7 +13,7 @@ class MoviesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeState = ref.watch(themeProvider);
+    // final themeState = ref.watch(themeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -30,15 +30,30 @@ class MoviesScreen extends ConsumerWidget {
               color: Colors.red,
             ),
           ),
-          IconButton(
-            onPressed: () async {
-              await ref.read(themeProvider.notifier).toggleTheme();
+          // IconButton(
+          //   onPressed: () async {
+          //     await ref.read(themeProvider.notifier).toggleTheme();
+          //   },
+          //   icon: Icon(
+          //     themeState == ThemeEnums.dark
+          //         ? MyAppIcons.darkMode
+          //         : MyAppIcons.lightMode,
+          //   ),
+          // ),
+          Consumer(
+            builder: (context, ref, child) {
+              final themeState = ref.watch(themeProvider);
+              return IconButton(
+                onPressed: () async {
+                  await ref.read(themeProvider.notifier).toggleTheme();
+                },
+                icon: Icon(
+                  themeState == ThemeEnums.dark
+                      ? MyAppIcons.darkMode
+                      : MyAppIcons.lightMode,
+                ),
+              );
             },
-            icon: Icon(
-              themeState == ThemeEnums.dark
-                  ? MyAppIcons.darkMode
-                  : MyAppIcons.lightMode,
-            ),
           ),
         ],
       ),
