@@ -16,19 +16,19 @@ class MoviesState {
     this.fetchMoviesError = '',
   });
 
-  // MoviesState copyWith({
-  //   int? currentPage,
-  //   List<MovieModel>? moviesList,
-  //   List<MoviesGenre>? genresList,
-  //   bool? isLoading,
-  //   String? fetchMoviesError,
-  // }) {
-  //   return MoviesState(
-  //     currentPage: currentPage ?? this.currentPage,
-  //     moviesList: moviesList ?? this.moviesList,
-  //     genresList: genresList ?? this.genresList,
-  //     isLoading: isLoading ?? this.isLoading,
-  //     fetchMoviesError: fetchMoviesError ?? this.fetchMoviesError,
-  //   );
-  // }
+  MoviesState copyWith({
+    int? currentPage,
+    List<MovieModel>? moviesList,
+    List<MoviesGenre>? genresList,
+    bool? isLoading,
+    String? fetchMoviesError,
+  }) {
+    return MoviesState(
+      currentPage: currentPage ?? this.currentPage,
+      moviesList: moviesList ?? this.moviesList,
+      genresList: genresList ?? this.genresList,
+      isLoading: isLoading ?? this.isLoading,
+      fetchMoviesError: fetchMoviesError ?? this.fetchMoviesError,
+    );
+  }
 }
