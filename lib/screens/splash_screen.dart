@@ -7,8 +7,8 @@ import '../view_models/movies/movies_provider.dart';
 import '../widgets/my_error_widget.dart';
 import 'movies_screen.dart';
 
-final initializationProvider = FutureProvider((ref) async {
-  await Future.delayed(const Duration(seconds: 1));
+final initializationProvider = FutureProvider.autoDispose<void>((ref) async {
+  // ref.keepAlive();
   await Future.microtask(() async {
     await ref.read(moviesProvider.notifier).getMovies();
   });
@@ -20,23 +20,62 @@ class SplashScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final initWatch = ref.watch(initializationProvider);
-    return initWatch.when(
-      data: (_) {
-        getIt<NavigationService>().navigateReplace(const MoviesScreen());
-        return const SizedBox.shrink();
-      },
-      error: (error, _) {
-        return MyErrorWidget(
-          errorText: error.toString(),
-          retryFunction: () => ref.refresh(initializationProvider),
-        );
-      },
-      loading: () {
-        return const CircularProgressIndicator.adaptive();
-      },
+    return Scaffold(
+      body: initWatch.when(
+        data: (_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            getIt<NavigationService>().navigateReplace(
+              const MoviesScreen(),
+            );
+          });
+          return const SizedBox.shrink();
+        },
+        error: (error, _) {
+          return MyErrorWidget(
+            errorText: error.toString(),
+            retryFunction: () => ref.refresh(
+              initializationProvider,
+            ),
+          );
+        },
+        loading: () {
+          return const CircularProgressIndicator.adaptive();
+        },
+      ),
     );
   }
 }
+
+// final initializationProvider = FutureProvider((ref) async {
+//   await Future.delayed(const Duration(seconds: 1));
+//   await Future.microtask(() async {
+//     await ref.read(moviesProvider.notifier).getMovies();
+//   });
+// });
+//
+// class SplashScreen extends ConsumerWidget {
+//   const SplashScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final initWatch = ref.watch(initializationProvider);
+//     return initWatch.when(
+//       data: (_) {
+//         getIt<NavigationService>().navigateReplace(const MoviesScreen());
+//         return const SizedBox.shrink();
+//       },
+//       error: (error, _) {
+//         return MyErrorWidget(
+//           errorText: error.toString(),
+//           retryFunction: () => ref.refresh(initializationProvider),
+//         );
+//       },
+//       loading: () {
+//         return const CircularProgressIndicator.adaptive();
+//       },
+//     );
+//   }
+// }
 
 // Using the future builder with the Riverpod state management
 // import 'dart:developer';
